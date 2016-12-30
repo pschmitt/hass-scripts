@@ -14,6 +14,10 @@ usage_stateful() {
     echo "Usage: $(basename "$0") $1 [on|off|toggle|state]"
 }
 
+__extract_names() {
+    sed -rn 's/android_cam_(.*)_hostname.*/\1/p' "$SECRETS_FILE"
+}
+
 __extract_value() {
    awk '/android_cam_'"$1"'_'"$2"'/ {print $2; exit}' "$SECRETS_FILE"
 }
@@ -161,13 +165,18 @@ do_stateful() {
     esac
 }
 
-PHONE=z3c
-PHONE_HOSTNAME=$(__get_hostname "$PHONE")
-PHONE_USERNAME=$(__get_username "$PHONE")
-PHONE_PASSWORD=$(__get_password "$PHONE")
+cam_names=$(__extract_names)
+if ! grep -q -w "$1" <<< "$cam_names"
+then
+    echo "No device named $1 found. Available cameras: $(tr '\n' ' ' <<< $cam_names)"
+    exit 3
+fi
+PHONE_HOSTNAME=$(__get_hostname "$1")
+PHONE_USERNAME=$(__get_username "$1")
+PHONE_PASSWORD=$(__get_password "$1")
 
-case "$1" in
-    cam|torch|ffc) do_stateful "$1" "$2" ;;
+case "$2" in
+    cam|torch|ffc) do_stateful "$2" "$3" ;;
     battery) ssh_su_exec "cat /sys/class/power_supply/battery/capacity" ;;
     *)
         usage
