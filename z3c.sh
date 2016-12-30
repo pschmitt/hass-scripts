@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cd "$(readlink -f "$(dirname "$0")")" || exit 9
+
 SECRETS_FILE=../config/secrets.yaml
 PHONE_SSH_PORT=2222
 PHONE_PORT=8080

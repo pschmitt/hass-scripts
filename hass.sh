@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
+cd "$(readlink -f "$(dirname "$0")")" || exit 9
+
 HASS_URL="https://$(awk '/base_url/ { print $2;exit }' ../config/secrets.yaml)"
 HASS_PASSWORD=$(awk '/http_password/ { print $2;exit }' ../config/secrets.yaml)
-
 
 usage() {
     echo "Usage: $(basename "$0") get|post API_ENDPOINT"
