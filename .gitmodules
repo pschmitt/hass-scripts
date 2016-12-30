@@ -1,0 +1,3 @@
+[submodule "livebox-mote"]
+	path = livebox-mote
+	url = https://github.com/pschmitt/livebox-mote
