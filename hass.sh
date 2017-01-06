@@ -10,34 +10,39 @@ usage() {
 }
 
 __rq() {
+    if [[ -n "$3" ]]
+    then
+        local json_data="-d $3"
+    fi
     curl -qqs -X "$1" \
         -H "X-HA-ACCESS: $HASS_PASSWORD" \
         -H "Content-Type: application/json" \
+        "$json_data" \
         "${HASS_URL}/api/$2"
     echo
 }
 
 rq() {
-    local method=$1
-    shift
-    local params=$@
-    __rq "$method" "$params"
+    local method="$1"
+    local endpoint="$2"
+    local params="$3"
+    __rq "$method" "$endpoint" "$params"
 }
 
 rq_get() {
-    rq GET "$1"
+    rq GET "$1" "$2"
 }
 
 rq_post() {
-    rq POST "$1"
+    rq POST "$1" "$2"
 }
 
 case "$1" in
     g|get|GET|G)
-        rq_get "$2"
+        rq_get "$2" "$3"
         ;;
     p|post|POST|p)
-        rq_post "$2"
+        rq_post "$2" "$3"
         ;;
     *)
         usage
