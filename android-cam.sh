@@ -7,7 +7,7 @@ PHONE_SSH_PORT=2222
 PHONE_PORT=8080
 
 usage() {
-    echo "Usage: $(basename "$0") cam|torch|ffc|battery PARAMS"
+    echo "Usage: $(basename "$0") cam|torch|ffc|battery|reboot PARAMS"
 }
 
 usage_stateful() {
@@ -88,11 +88,11 @@ cam_toggle() {
 }
 
 cam_state() {
-    rq > /dev/null 2>&1
+    rq 2>/dev/null | grep -q '<title>IP Webcam</title>' #> /dev/null 2>&1
 }
 
 rq() {
-    curl -qqs -u "${PHONE_USERNAME}:${PHONE_PASSWORD}" \
+    curl -qqs -m 3 -u "${PHONE_USERNAME}:${PHONE_PASSWORD}" \
         "http://${PHONE_HOSTNAME}:${PHONE_PORT}/${1}"
 }
 
@@ -178,6 +178,7 @@ PHONE_PASSWORD=$(__get_password "$1")
 case "$2" in
     cam|torch|ffc) do_stateful "$2" "$3" ;;
     battery) ssh_su_exec "cat /sys/class/power_supply/battery/capacity" ;;
+    reboot) ssh_su_exec "reboot" &;;
     *)
         usage
         exit 2
