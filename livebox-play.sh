@@ -1,1 +1,0 @@
-livebox-mote/mote.sh
