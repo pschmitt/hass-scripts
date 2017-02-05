@@ -95,6 +95,16 @@ case "$1" in
         esac
         ;;
     l|light)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing light action." >&2
+            exit 3
+        fi
+        if [[ -z "$3" ]]
+        then
+            echo "Missing light name." >&2
+            exit 3
+        fi
         case "$2" in
             on)
                 light turn_on "$3"
@@ -105,18 +115,47 @@ case "$1" in
             toggle)
                 light toggle "$3"
                 ;;
+            *)
+                usage
+                exit 2
+                ;;
         esac
         ;;
     s|script)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing script name." >&2
+            exit 3
+        fi
         script "$2"
         ;;
     scene)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing scene name." >&2
+            exit 3
+        fi
         scene "$2"
         ;;
     e|event)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing event name." >&2
+            exit 3
+        fi
         event "$2"
         ;;
     n|notify)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing notifier name." >&2
+            exit 3
+        fi
+        if [[ -z "$3" ]]
+        then
+            echo "Missing message." >&2
+            exit 3
+        fi
         notify "$2" "$3"
         ;;
     *)
