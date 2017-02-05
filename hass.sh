@@ -57,11 +57,12 @@ rq_post() {
     rq POST "$1" "$2"
 }
 
-call_script() {
+# Shortcut actions
+script() {
     rq POST "services/script/$1" "$2"
 }
 
-fire_event() {
+event() {
     rq POST "events/$1"
 }
 
@@ -69,7 +70,7 @@ notify() {
     rq POST "services/notify/$1" "$2"
 }
 
-start_scene() {
+scene() {
     rq POST "services/scene/turn_on" "$1"
 }
 
@@ -89,13 +90,13 @@ case "$1" in
         esac
         ;;
     s|script)
-        call_script "$2" "$3"
+        script "$2" "$3"
         ;;
     scene)
-        start_scene "$2"
+        scene "$2"
         ;;
     e|event)
-        fire_event "$2"
+        event "$2"
         ;;
     n|notify)
         notify "$2" "$3"
