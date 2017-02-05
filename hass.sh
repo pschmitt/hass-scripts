@@ -72,11 +72,11 @@ notify() {
 }
 
 light() {
-    rq POST "services/light/$1" entity_id=$2
+    rq POST "services/light/$1" entity_id=light.$2
 }
 
 scene() {
-    rq POST "services/scene/turn_on" entity_id=$1
+    rq POST "services/scene/turn_on" entity_id=scene.$1
 }
 
 case "$1" in
