@@ -9,7 +9,7 @@ usage() {
     echo -e "Usage: $(basename "$0") ACTION API_ENDPOINT [DATA]\n"
     echo -e "ACTION: raw|script|scene|event\n"
     echo -e "- raw [GET|POST] API_ENDPOINT [DATA]"
-    echo -e "- script SCRIPT_NAME [DATA]"
+    echo -e "- script SCRIPT_NAME"
     echo -e "- scene SCENE_NAME"
     echo -e "- event EVENT_NAME"
 }
@@ -34,7 +34,7 @@ __rq_httpie() {
 
 __rq() {
     # Use httpie by default (if available)
-    if command -v http >/dev/null 2>&1
+    if command -v http > /dev/null 2>&1
     then
         __rq_httpie $*
     else
@@ -59,7 +59,7 @@ rq_post() {
 
 # Shortcut actions
 script() {
-    rq POST "services/script/$1" "$2"
+    rq POST "services/script/$1"
 }
 
 event() {
@@ -67,11 +67,11 @@ event() {
 }
 
 notify() {
-    rq POST "services/notify/$1" "$2"
+    rq POST "services/notify/$1" message=$2
 }
 
 scene() {
-    rq POST "services/scene/turn_on" "$1"
+    rq POST "services/scene/turn_on" entity_id=$1
 }
 
 case "$1" in
@@ -90,7 +90,7 @@ case "$1" in
         esac
         ;;
     s|script)
-        script "$2" "$3"
+        script "$2"
         ;;
     scene)
         scene "$2"
