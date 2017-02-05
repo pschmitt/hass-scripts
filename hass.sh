@@ -7,9 +7,10 @@ HASS_PASSWORD=$(awk '/http_password/ { print $2;exit }' ../config/secrets.yaml)
 
 usage() {
     echo -e "Usage: $(basename "$0") ACTION API_ENDPOINT [DATA]\n"
-    echo -e "ACTION: raw|script|event\n"
+    echo -e "ACTION: raw|script|scene|event\n"
     echo -e "- raw [GET|POST] API_ENDPOINT [DATA]"
     echo -e "- script SCRIPT_NAME [DATA]"
+    echo -e "- scene SCENE_NAME"
     echo -e "- event EVENT_NAME"
 }
 
@@ -68,6 +69,10 @@ notify() {
     rq POST "services/notify/$1" "$2"
 }
 
+start_scene() {
+    rq POST "services/scene/turn_on" "$1"
+}
+
 case "$1" in
     r|raw)
         case "$2" in
@@ -85,6 +90,9 @@ case "$1" in
         ;;
     s|script)
         call_script "$2" "$3"
+        ;;
+    scene)
+        start_scene "$2"
         ;;
     e|event)
         fire_event "$2"
