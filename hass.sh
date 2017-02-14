@@ -79,6 +79,10 @@ scene() {
     rq POST "services/scene/turn_on" entity_id=scene.$1
 }
 
+state() {
+    rq GET "states/$1"
+}
+
 case "$1" in
     r|raw)
         case "$2" in
@@ -136,6 +140,14 @@ case "$1" in
             exit 3
         fi
         scene "$2"
+        ;;
+    state)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing entity_id." >&2
+            exit 3
+        fi
+        state "$2"
         ;;
     e|event)
         if [[ -z "$2" ]]
