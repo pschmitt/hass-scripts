@@ -5,7 +5,7 @@ cd "$(readlink -f "$(dirname "$0")")" || exit 9
 SECRETS_FILE=../config/secrets.yaml
 
 usage() {
-    echo "Usage: $(basename "$0") CAMERA ir|modect|sodect|state [PARAMS]"
+    echo "Usage: $(basename "$0") CAMERA ir|modect|sodect|state|snap [PARAMS]"
 }
 
 usage_stateful() {
@@ -107,6 +107,18 @@ do_stateful() {
     esac
 }
 
+snap() {
+    local api_url dest="$1"
+    api_url="http://$hostname:88/cgi-bin/CGIProxy.fcgi?&usr=${username}&pwd=${password}&cmd=snapPicture2"
+    if [[ -n "$dest" ]]
+    then
+        curl -fqqs "$api_url" > "$dest"
+    else
+        echo "Missing destination file" >&2
+        exit 2
+    fi
+}
+
 [[ $# -eq 0 ]] && { usage; exit; }
 
 # Construct config array
@@ -141,6 +153,7 @@ shift
 case "$1" in
     state) dev_state ;;
     ir|modect|sodect) do_stateful "$1" "$2" ;;
+    s|snap) snap "$2" ;;
     -h) usage ;;
     *)
         usage
