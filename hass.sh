@@ -83,6 +83,29 @@ state() {
     rq GET "states/$1"
 }
 
+snap() {
+    local snap_url dest=$2
+    snap_url=$(state "camera.$1" | \
+               sed -n 's/.*"entity_picture": *"\([^"]\+\)",.*/\1/p')
+    if [[ -z "$snap_url" ]]
+    then
+        echo "Failed to determine snap URL for entity camera.$1" >&2
+        exit 4
+    fi
+    if [[ -z "$dest" ]]
+    then
+        dest=$1.jpg
+    fi
+    snap_url="${HASS_URL}${snap_url}"
+    if curl -fqqs "$snap_url" > "$dest"
+    then
+        echo "Saved snapshot to $dest"
+    else
+        echo "Failed to save snapshot" >&2
+        exit 5
+    fi
+}
+
 case "$1" in
     r|raw)
         case "$2" in
@@ -169,6 +192,14 @@ case "$1" in
             exit 3
         fi
         notify "$2" "$3"
+        ;;
+    snap)
+        if [[ -z "$2" ]]
+        then
+            echo "Missing camera name." >&2
+            exit 3
+        fi
+        snap "$2" "$3"
         ;;
     *)
         usage
