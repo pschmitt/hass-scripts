@@ -29,17 +29,22 @@ __rq_curl() {
 }
 
 __rq_httpie() {
-    http -j -p b "$1" "${HASS_URL}/api/$2" \
-        "X-HA-ACCESS:$HASS_PASSWORD" $3
+    local cmd
+    cmd='http -j -p b "$1" "${HASS_URL}/api/$2" "X-HA-ACCESS:$HASS_PASSWORD"'
+    if [[ -n "$3" ]]
+    then
+        cmd="$cmd \"$3\""
+    fi
+    eval "$cmd"
 }
 
 __rq() {
     # Use httpie by default (if available)
     if command -v http > /dev/null 2>&1
     then
-        __rq_httpie $*
+        __rq_httpie "$@"
     else
-        __rq_curl $*
+        __rq_curl "$@"
     fi
 }
 
@@ -68,7 +73,7 @@ event() {
 }
 
 notify() {
-    rq POST "services/notify/$1" message=$2
+    rq POST "services/notify/$1" message="$2"
 }
 
 light() {
