@@ -6,10 +6,10 @@ HUE_HOSTNAME=philips-hue.lan
 HUE_PORT=80
 HUE_USERNAME=$(awk '/hue_username/ { print $2 }' ../config/secrets.yaml)
 
-declare -A SENSOR_TEMPERATURE=( [bathroom]=21 [hallway]=11 [kitchen]=17 [toilet]=4 )
-declare -A SENSOR_PRESENCE=( [bathroom]=22 [hallway]=12 [kitchen]=18 [toilet]=5 )
-declare -A SENSOR_LIGHT_LEVEL=( [bathroom]=23 [hallway]=13 [kitchen]=19 [toilet]=6 )
-declare -A SENSOR_SWITCH=( [master]=2 )
+declare -A SENSOR_TEMPERATURE=( [bathroom]=5 [hallway]=11 [kitchen]=8 [toilet]=2 )
+declare -A SENSOR_PRESENCE=( [bathroom]=6 [hallway]=12 [kitchen]=9 [toilet]=3 )
+declare -A SENSOR_LIGHT_LEVEL=( [bathroom]=7 [hallway]=13 [kitchen]=10 [toilet]=4 )
+declare -A SENSOR_SWITCH=( [master]=17 )
 declare -A SENSOR_SWITCH_BUTTONS=(
     [1000]=INITIAL_PRESSED_1 [1001]=HOLD_1 [1002]=SHORT_RELEASED_1 [1003]=LONG_RELEASED_1
     [2000]=INITIAL_PRESSED_2 [2001]=HOLD_2 [2002]=SHORT_RELEASED_2 [2003]=LONG_RELEASED_2
