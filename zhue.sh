@@ -130,14 +130,14 @@ switch_check() {
         then
             # echo "$(date): Button $button pressed ($button_event)"
             # Fire Home Assistant Event
-            ./hass.sh post "events/zhue_switch_${switch_name}_button_${button}"
+            ./hass.sh event "zhue_switch_${switch_name}_button_${button}"
         fi
         previous="$button"
     fi
 }
 
 switch_daemon_multi() {
-    local interval=.5
+    local interval=.8
     local switch_name
     while :
     do
