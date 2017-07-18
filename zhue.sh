@@ -137,7 +137,7 @@ switch_check() {
 }
 
 switch_daemon_multi() {
-    local interval=.8
+    local interval=1
     local switch_name
     while :
     do
@@ -150,7 +150,7 @@ switch_daemon_multi() {
 }
 
 switch_daemon_single() {
-    local interval=.5
+    local interval=1
     while :
     do
         switch_check "$1"
